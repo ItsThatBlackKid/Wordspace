@@ -10,8 +10,6 @@ public class WebsterFileExplorer extends JDialog implements ActionListener {
     JPanel dialog = new JPanel();
     JPanel fileView = new JPanel();
 
-    static final int APPROVE_OPTION = 0;
-
     public void showSaveExplorer(Component parent) {
         setTitle("Save");
         setVisible(true);
@@ -31,7 +29,7 @@ public class WebsterFileExplorer extends JDialog implements ActionListener {
         saveBTN.setActionCommand("save");
         saveBTN.addActionListener(this);
 
-        dialog.add(new JButton("Cancel"));
+
         dialog.add(saveBTN, BorderLayout.SOUTH);
 
         add(dialog, BorderLayout.SOUTH);
@@ -42,6 +40,7 @@ public class WebsterFileExplorer extends JDialog implements ActionListener {
         String c = e.getSource().toString();
 
         if(c.equalsIgnoreCase("save")) {
+
 
         }
     }
