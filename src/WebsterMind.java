@@ -12,5 +12,9 @@ public class WebsterMind extends JPopupMenu {
         setBackground(new Color(0,0,0,50));
         setLocation(x, y);
     }
+    
+    void onCreate() {
+    //TODO 
+    }
 
 }
