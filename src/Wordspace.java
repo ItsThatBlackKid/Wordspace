@@ -4,6 +4,8 @@ import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.ImageObserver;
 import java.awt.image.ImageProducer;
 import java.io.File;
@@ -16,14 +18,13 @@ import java.io.IOException;
 public class Wordspace extends JFrame {
     //Variable
     public JMenuBar menuBar = new JMenuBar();
-    public JMenu[] menus = new JMenu[5];
-    public JLabel lines = new JLabel();
-    public JLabel position = new JLabel();
     public JTextArea magic = new JTextArea();
     public JLabel currentLine = new JLabel();
     public JFileChooser chooser = new JFileChooser();
     public Status status = new Status();
     public Tools tools = new Tools();
+    public JButton settings = new JButton("Settings");
+    public JMenu[] menus = new JMenu[5];
 
     public static void main(String[] args) {
         new Wordspace().setVisible(true);
@@ -31,7 +32,7 @@ public class Wordspace extends JFrame {
 
     //Declaring the interface
     public Wordspace() {
-        setTitle("Webster");
+        setTitle(System.getProperty("user.name"));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(800, 700);
         setLayout(new BorderLayout());
@@ -52,38 +53,49 @@ public class Wordspace extends JFrame {
         add(tools, BorderLayout.NORTH);
     }
 
+    public void updateCount(JLabel label) {
+        label.setText("Lines: " + magic.getLineCount());
+    }
+
+    public void updateWords(JLabel label) {
+        String docWord = magic.getText();
+        String[] wordArray = docWord.split("\\s+");
+        int wordCount = wordArray.length;
+
+        label.setText("Words: " + wordCount);
+    }
+
     void writingBoard() {
         magic.addCaretListener(new CaretListener() {
             @Override
             public void caretUpdate(CaretEvent e) {
 
-                position.setText(" Position: " + e.getDot());
-                currentLine.setText("Current: " + e.getMark());
+               status.position.setText("Position: " + e.getDot());
             }
         });
 
         magic.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                updateCount();
+                updateCount(status.lines);
+                updateWords(status.words);
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                updateCount();
+                updateCount(status.lines);
+                updateWords(status.words);
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                updateCount();
+                updateCount(status.lines);
+                updateWords(status.words);
             }
         });
     }
 
     void menu() {
-
-
-
         String menuStrings[] = {
                 "File",
                 "Find",
@@ -160,9 +172,7 @@ public class Wordspace extends JFrame {
 
     }
 
-    void updateCount() {
-        lines.setText("Lines: " + magic.getLineCount());
-    }
+
 
     void save() {
 
@@ -188,21 +198,6 @@ public class Wordspace extends JFrame {
     void open() {
         int result = chooser.showOpenDialog(this);
 
-    }
-
-
-    public class Status extends JPanel {
-        public JButton settings = new JButton("Settings");
-
-        public Status() {
-            setLayout(new FlowLayout(0, 3, 0));
-            setPreferredSize(new Dimension(this.getWidth(), 16));
-            setBackground(Color.lightGray);
-            setForeground(Color.white);
-
-            add(lines);
-            add(position);
-        }
     }
 
     public class Tools extends JPanel {
